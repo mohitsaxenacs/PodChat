@@ -1,0 +1,104 @@
+You are an expert at extracting and structuring knowledge from podcast transcripts for use in interactive chat environments.
+
+Your task is to analyze the following podcast transcript and create a chat-optimized knowledge context that can be loaded into a coding assistant or chat environment.
+
+TRANSCRIPT:
+{transcript}
+
+VIDEO METADATA:
+- Video ID: {video_id}
+- URL: {url}
+- Duration: {duration}
+- Word Count: {word_count}
+
+REQUIREMENTS:
+
+Your output should enable someone to:
+1. Ask questions about the podcast content
+2. Apply the speaker's expertise to their own projects
+3. Reference specific frameworks, methodologies, or concepts discussed
+4. Understand the speaker's perspective and reasoning
+
+Create a structured knowledge document that includes:
+
+1. **Expertise Summary**: What is the speaker's main area of expertise? What unique perspective do they bring?
+
+2. **Key Concepts & Frameworks**: List and explain the main concepts, frameworks, methodologies, or mental models discussed.
+
+3. **Practical Guidance**: Extract actionable advice, best practices, and practical tips.
+
+4. **Examples & Case Studies**: Summarize any specific examples, stories, or case studies mentioned.
+
+5. **Speaker's Perspective**: Capture the speaker's philosophy, values, and approach to their domain.
+
+6. **Quick Reference**: Create a condensed reference of key terms, concepts, and their definitions.
+
+OUTPUT FORMAT (Markdown optimized for chat loading):
+
+# [Podcast Title] - Expert Knowledge Context
+
+## Source Information
+- URL: {url}
+- Duration: {duration}
+- Processed: [Current Date]
+
+## How to Use This Context
+Load this document into your chat assistant to:
+- Ask questions about the concepts discussed
+- Apply the expertise to your specific projects
+- Reference frameworks and methodologies
+- Get advice based on the speaker's perspective
+
+---
+
+## Expertise Summary
+[2-3 paragraphs describing the speaker's expertise and unique perspective]
+
+## Key Concepts & Frameworks
+
+### Concept 1: [Name]
+**Definition**: [Clear explanation]
+**Application**: [How to apply this]
+**Timestamp**: [HH:MM:SS]
+
+[Continue for all major concepts...]
+
+## Practical Guidance
+
+### On [Topic Area]:
+- [Specific advice 1]
+- [Specific advice 2]
+- [Best practice]
+
+[Continue for major topic areas...]
+
+## Examples & Case Studies
+
+**Example 1**: [Title]
+- **Context**: [What it illustrates]
+- **Details**: [Summary of the example]
+- **Takeaway**: [What to learn from it]
+
+[Continue for notable examples...]
+
+## Speaker's Philosophy & Approach
+[Detailed explanation of the speaker's perspective, values, and methodology]
+
+## Quick Reference
+
+**Key Terms**:
+- **[Term 1]**: [Definition]
+- **[Term 2]**: [Definition]
+
+**Frameworks**: [List]
+
+**Best Practices**: [List]
+
+---
+
+## Example Questions You Can Ask
+- [Example question 1]
+- [Example question 2]
+- [Example question 3]
+
+Now, create the chat-optimized knowledge context:

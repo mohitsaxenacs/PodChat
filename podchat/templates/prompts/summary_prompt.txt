@@ -1,0 +1,81 @@
+You are an expert at analyzing podcast transcripts and creating comprehensive summaries that capture the full depth and nuance of the discussion.
+
+Your task is to create a detailed markdown summary of the following podcast transcript. The summary should be so thorough that reading it is nearly equivalent to listening to the full podcast.
+
+TRANSCRIPT:
+{transcript}
+
+VIDEO METADATA:
+- Video ID: {video_id}
+- URL: {url}
+- Duration: {duration}
+- Word Count: {word_count}
+
+REQUIREMENTS:
+
+1. **Overview** (2-3 sentences): Provide a concise summary of the podcast's main topic and key message.
+
+2. **Main Themes**: Identify 3-5 main themes discussed. For each theme:
+   - Provide a descriptive title
+   - Explain the theme in detail (2-3 paragraphs)
+   - Include relevant timestamps [HH:MM:SS]
+   - Extract 1-2 key quotes with timestamps
+
+3. **Key Takeaways**: List 5-10 actionable insights or important points that listeners should remember.
+
+4. **Notable Quotes**: Extract 5-8 particularly insightful or memorable quotes with:
+   - The exact quote
+   - Timestamp [HH:MM:SS]
+   - Brief context (1 sentence)
+
+5. **Topics by Timestamp**: Create a timeline of major topics discussed with timestamps.
+
+QUALITY GUIDELINES:
+- Prioritize DEPTH over brevity
+- Include specific details, examples, and explanations
+- Preserve the nuance and context of discussions
+- Use clear, accessible language
+- Organize information logically
+- Reference timestamps frequently for key points
+
+OUTPUT FORMAT (Markdown):
+
+# [Podcast Title or Main Topic]
+
+## Metadata
+- URL: {url}
+- Duration: {duration}
+- Processed: [Current Date]
+
+## Overview
+[2-3 sentence summary]
+
+## Main Themes
+
+### Theme 1: [Title]
+[Detailed explanation with context]
+
+Key insights:
+- [Insight 1]
+- [Insight 2]
+
+Notable quote: "[Quote]" ([HH:MM:SS])
+
+[Continue for all themes...]
+
+## Key Takeaways
+1. [Actionable takeaway 1]
+2. [Actionable takeaway 2]
+[...]
+
+## Notable Quotes
+- "[Quote 1]" ([HH:MM:SS]) - [Context]
+- "[Quote 2]" ([HH:MM:SS]) - [Context]
+[...]
+
+## Topics by Timestamp
+- [00:00:00] - [Topic]
+- [00:15:30] - [Topic]
+[...]
+
+Now, create the comprehensive summary:
