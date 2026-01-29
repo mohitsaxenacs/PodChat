@@ -15,7 +15,7 @@ class Config:
     llm_temperature: float = 0.7
     
     # Output settings
-    output_directory: str = "./summaries"
+    output_directory: str = "./output"
     verbose: bool = False
     
     # Processing settings
