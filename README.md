@@ -12,10 +12,13 @@ PodChat is a command-line tool that extracts transcripts from YouTube podcasts a
 ## Features
 
 - ✅ Extract transcripts from any YouTube video with captions
-- ✅ Generate in-depth summaries with timestamps
+- ✅ Generate in-depth summaries with clickable timestamps
+- ✅ Clickable timestamps that link directly to YouTube video sections
 - ✅ Create chat-optimized knowledge contexts
 - ✅ Support for podcasts of any length
 - ✅ Beautiful, structured markdown output
+- ✅ Organized output: separate directories for summaries and chats
+- ✅ Human-readable filenames based on video titles
 - ✅ Simple CLI interface
 - ✅ Verbose mode for debugging
 
@@ -72,7 +75,7 @@ OPENROUTER_API_KEY=sk-or-v1-your-api-key-here
 LLM_PROVIDER=openrouter
 LLM_MODEL=anthropic/claude-sonnet-4.5
 LLM_BASE_URL=https://openrouter.ai/api/v1
-OUTPUT_DIRECTORY=./summaries
+OUTPUT_DIRECTORY=./output
 LOG_LEVEL=INFO
 ```
 
@@ -88,11 +91,12 @@ podchat summarize "https://www.youtube.com/watch?v=VIDEO_ID"
 python3 -m podchat summarize "https://www.youtube.com/watch?v=VIDEO_ID"
 ```
 
-This creates a comprehensive markdown summary in the `./summaries/` directory with:
+This creates a comprehensive markdown summary in `./output/summaries/` with:
 - Main themes and key insights
-- Timestamped sections
+- Clickable timestamps linking directly to video sections
 - Notable quotes
 - Detailed analysis
+- Human-readable filename based on video title
 
 **Example output:**
 ```
@@ -105,7 +109,7 @@ This creates a comprehensive markdown summary in the `./summaries/` directory wi
 
 ✅ Summary generated successfully!
 
-📝 Output: summaries/podcast-summary-20260130-024008-MWMe7yjPYpE.md
+📝 Output: output/summaries/the_path_to_advanced_machine_intelligence_summary.md
 📊 Stats:
    - Words: 4,714
    - Time: 164.18s
@@ -188,6 +192,32 @@ podchat chat --help
 
 See [`examples/sample_outputs/example_summary.md`](examples/sample_outputs/example_summary.md) for a complete example.
 
+## Output Structure
+
+PodChat organizes output into mode-specific directories:
+
+```
+./output/
+├── summaries/
+│   ├── video_title_1_summary.md
+│   └── video_title_2_summary.md
+└── chats/
+    ├── video_title_1_chat.md
+    └── video_title_2_chat.md
+```
+
+**Features:**
+- **Organized by Mode**: Summaries and chats in separate directories
+- **Human-Readable Names**: Filenames based on video titles (sanitized, max 50 chars)
+- **Clickable Timestamps**: All timestamps in summaries link directly to YouTube
+- **Duplicate Handling**: Automatically adds date suffix if file exists
+- **Backward Compatible**: Old `./summaries/` directory remains untouched
+
+**Example Filename Transformation:**
+- Video: "Cursor 2.0: Expert Tips and Hacks for AI-Assisted Development"
+- Summary: `cursor_20_expert_tips_and_hacks_for_ai_assisted_de_summary.md`
+- Chat: `cursor_20_expert_tips_and_hacks_for_ai_assisted_de_chat.md`
+
 ### Example Chat Context Output
 
 ```markdown
@@ -217,8 +247,10 @@ See [`examples/sample_outputs/example_chat_context.md`](examples/sample_outputs/
 
 1. **Extract**: Fetches the YouTube transcript using youtube-transcript-api
 2. **Process**: Sends transcript to Claude Sonnet 4.5 via OpenRouter API
-3. **Format**: Generates structured markdown output based on mode (summary/chat)
-4. **Save**: Writes to file with metadata and statistics
+3. **Generate**: Creates structured markdown with LLM
+4. **Enhance**: Converts timestamps to clickable YouTube links
+5. **Organize**: Saves to mode-specific directory (`output/summaries/` or `output/chats/`)
+6. **Name**: Uses sanitized video title for human-readable filename
 
 ## Architecture
 

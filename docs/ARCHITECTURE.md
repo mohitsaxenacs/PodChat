@@ -624,6 +624,17 @@ class OutputFormatter:
     def _generate_filename(self, video_id: str, mode: str) -> str:
         """Generate appropriate filename."""
         pass
+    
+    def _make_timestamps_clickable(self, content: str, video_url: str) -> str:
+        """
+        Convert timestamp text [HH:MM:SS] to clickable YouTube links.
+        
+        Matches patterns like [HH:MM:SS] or [HH:MM:SS - HH:MM:SS] and converts
+        them to markdown links that navigate to the video at that timestamp.
+        
+        Example: [00:01:21] → [[00:01:21]](https://www.youtube.com/watch?v=ID&t=81s)
+        """
+        pass
 ```
 
 ### 5.3 Integration Layer
@@ -917,7 +928,7 @@ class Config:
     llm_temperature: float = 0.7
     
     # Output settings
-    output_directory: str = "./summaries"
+    output_directory: str = "./output"
     verbose: bool = False
     
     # Processing settings
@@ -1080,8 +1091,8 @@ llm:
 
 # Output Configuration
 output:
-  directory: ./summaries
-  filename_format: "podcast-{mode}-{date}-{video_id}.md"
+  directory: ./output
+  filename_format: "{title}_{mode}.md"  # Title-based with mode suffix
 
 # Processing Configuration
 processing:
@@ -1106,7 +1117,7 @@ OPENROUTER_API_KEY=sk-or-v1-...
 LLM_PROVIDER=openrouter
 LLM_MODEL=anthropic/claude-sonnet-4.5
 LLM_BASE_URL=https://openrouter.ai/api/v1
-OUTPUT_DIRECTORY=./summaries
+OUTPUT_DIRECTORY=./output
 LOG_LEVEL=INFO
 
 # Future: Direct provider API keys
