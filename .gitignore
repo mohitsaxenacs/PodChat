@@ -22,8 +22,6 @@ dist/
 *.swp
 *.swo
 
-# Output
-summaries/
 
 # Logs
 *.log
