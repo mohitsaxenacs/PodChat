@@ -52,9 +52,9 @@ class TranscriptExtractor:
         
         for item in raw_data:
             segment = TranscriptSegment(
-                text=item['text'],
-                start=item['start'],
-                duration=item['duration']
+                text=item.text if hasattr(item, 'text') else item['text'],
+                start=item.start if hasattr(item, 'start') else item['start'],
+                duration=item.duration if hasattr(item, 'duration') else item['duration']
             )
             segments.append(segment)
             total_duration = max(total_duration, segment.end)

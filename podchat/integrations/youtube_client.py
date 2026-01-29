@@ -55,7 +55,8 @@ class YouTubeClient:
         
         try:
             self.logger.info(f"Fetching transcript for video: {video_id}")
-            transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+            api = YouTubeTranscriptApi()
+            transcript_list = api.list(video_id)
             
             # Try to get transcript in preferred languages
             try:
