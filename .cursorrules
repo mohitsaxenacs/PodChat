@@ -1,0 +1,254 @@
+# Cursor Rules for PodChat
+
+## Project Context
+- Read agents.md for comprehensive project context
+- Python 3.9+ CLI tool for YouTube podcast transcript processing
+- Modular architecture: CLI → Core → Integrations → Output
+
+## Code Style & Standards
+
+### Python Conventions
+- Use type hints for all function signatures
+- Follow PEP 8 style guide
+- Use snake_case for functions and variables
+- Use PascalCase for classes
+- Maximum line length: 100 characters
+- Use docstrings for all public functions and classes
+
+### Import Organization
+```python
+# Standard library imports
+import os
+import sys
+from typing import List, Dict, Optional
+
+# Third-party imports
+import click
+from youtube_transcript_api import YouTubeTranscriptApi
+
+# Local imports
+from podchat.core import processor
+from podchat.models.config import Config
+```
+
+### Error Handling
+- Use custom exceptions from `podchat/utils/exceptions.py`
+- Always provide user-friendly error messages
+- Log technical details for debugging
+- Never expose raw tracebacks to end users
+
+### CLI Output Style
+- Use emoji for visual feedback: ✓ ✗ 📥 🤖 📝 ✨
+- Use click.style() for colored output (green=success, red=error, yellow=warning)
+- Show progress for long operations
+- Provide clear, actionable error messages
+
+## Architecture Patterns
+
+### Adapter Pattern for LLM Providers
+- All LLM clients inherit from BaseLLMClient
+- Maintain provider-agnostic core processing logic
+- Configuration-driven provider selection
+- Example: podchat/integrations/llm/
+
+### Separation of Concerns
+```
+CLI Layer (commands.py)
+  ↓ orchestrates
+Core Processing (processor.py)
+  ↓ uses
+Integrations (youtube_client.py, llm clients)
+  ↓ produces
+Models (transcript.py, config.py)
+  ↓ formatted by
+Output (output_formatter.py)
+```
+
+### Configuration Management
+- Use environment variables via .env file
+- Never hardcode API keys or secrets
+- Use Config dataclass for type-safe configuration
+- Provide .env.example for documentation
+
+## File Organization Rules
+
+### When Creating New Files:
+1. **Core logic** → `podchat/core/`
+2. **External integrations** → `podchat/integrations/`
+3. **Data models** → `podchat/models/`
+4. **CLI commands** → `podchat/cli/`
+5. **Utilities** → `podchat/utils/`
+6. **Tests** → `tests/` (mirror main structure)
+
+### When Modifying Existing Code:
+- Read the entire file first to understand context
+- Maintain existing patterns and conventions
+- Update docstrings if behavior changes
+- Consider backward compatibility
+
+## Testing Requirements
+
+### Before Committing:
+1. Test with short video (~5-10 min)
+2. Test with long video (1+ hour)
+3. Test error cases (invalid URL, no transcript)
+4. Run existing test suite: `python tests/test_phase4_quick.py [URL]`
+
+### Test Data:
+- Use examples from `examples/` directory
+- Keep test URLs in documentation, not hardcoded
+- Create reproducible test cases
+
+## Documentation Standards
+
+### Docstring Format:
+```python
+def process_transcript(transcript: List[Dict], video_id: str) -> str:
+    """Process YouTube transcript into formatted text.
+    
+    Args:
+        transcript: List of transcript entries with text, start, duration
+        video_id: YouTube video identifier
+        
+    Returns:
+        Formatted transcript text with timestamps
+        
+    Raises:
+        TranscriptProcessingError: If transcript is malformed
+    """
+    pass
+```
+
+### Code Comments:
+- Explain WHY, not WHAT
+- Use comments for complex logic or non-obvious decisions
+- Keep comments up-to-date with code changes
+
+## LLM Integration Guidelines
+
+### Prompt Templates
+- Store in `podchat/templates/prompts/`
+- Use .txt files for easy editing
+- Keep prompt logic separate from processing code
+- Test prompt changes with multiple videos
+
+### API Calls
+- Always use try-except for LLM API calls
+- Handle rate limits gracefully
+- Track token usage for cost monitoring
+- Set reasonable timeouts
+
+## Output Quality Standards
+
+### Summary Generation:
+- Must include metadata (URL, duration, date)
+- Timestamps must be clickable YouTube links
+- Proper markdown formatting
+- Comprehensive enough to skip full listen
+- Actionable takeaways included
+
+### Chat Context Generation:
+- Clear structure with sections
+- Practical guidance included
+- Reference timestamps for context
+- Example questions provided
+
+## Common Patterns to Follow
+
+### CLI Command Pattern:
+```python
+@click.command()
+@click.argument('url')
+@click.option('--output', '-o', help='Output path')
+@click.option('--verbose', '-v', is_flag=True, help='Verbose output')
+def command(url, output, verbose):
+    """Command description."""
+    try:
+        # Validate inputs
+        # Process
+        # Output success
+        click.echo(click.style('✓ Success!', fg='green'))
+    except Exception as e:
+        click.echo(click.style(f'✗ Error: {e}', fg='red'), err=True)
+        raise click.Abort()
+```
+
+### Configuration Loading:
+```python
+from podchat.utils.config import load_config
+
+config = load_config()  # Handles .env loading
+api_key = config.openrouter_api_key
+```
+
+### File Operations:
+```python
+from podchat.utils.file_manager import save_output
+
+save_output(
+    content=summary_text,
+    mode='summary',
+    video_title=title,
+    base_dir=config.output_directory
+)
+```
+
+## Things to Avoid
+
+### Anti-Patterns:
+- ❌ Hardcoded file paths (use config)
+- ❌ Print statements (use logger or click.echo)
+- ❌ Bare except clauses (catch specific exceptions)
+- ❌ Mixing business logic with CLI code
+- ❌ Duplicating code (extract to utils)
+- ❌ Committing .env files or API keys
+
+### Security:
+- Never log API keys or secrets
+- Validate all user inputs (URLs, file paths)
+- Use environment variables for sensitive data
+- Handle file operations safely (check permissions)
+
+## Quick Reference
+
+### Check Before Coding:
+1. ✅ Read agents.md for project context
+2. ✅ Check docs/python-reference/ for library patterns
+3. ✅ Review existing similar code
+4. ✅ Check if a skill exists in docs/skills/
+
+### File References:
+- **Architecture**: docs/ARCHITECTURE.md
+- **PRD**: docs/PRD.md
+- **Examples**: examples/sample_outputs/
+- **Tests**: tests/, RUN_PHASE*_TESTS.md
+
+### When Stuck:
+1. Reference relevant skill from docs/skills/
+2. Check examples/ for similar output
+3. Review existing integration code
+4. Check documentation in docs/
+
+## Special Instructions
+
+### When Adding Dependencies:
+1. Add to requirements.txt with version
+2. Update README.md installation section
+3. Test installation in clean environment
+4. Document why dependency is needed
+
+### When Changing Architecture:
+1. Update docs/ARCHITECTURE.md
+2. Consider backward compatibility
+3. Update tests to match new structure
+4. Update agents.md if significant
+
+### When Improving Prompts:
+1. Create backup of current version
+2. Test with standard test set (short, medium, long videos)
+3. Compare output quality
+4. Document changes in commit message
+
+---
+
+**Remember**: Always read agents.md at the start of a conversation for full project context. These rules supplement, not replace, the comprehensive guidance there.
